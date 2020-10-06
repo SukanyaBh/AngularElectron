@@ -1,6 +1,7 @@
-import { app, BrowserWindow, screen } from 'electron';
+import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
+import {autoUpdater} from "electron-updater";
 
 let win: BrowserWindow = null;
 const args = process.argv.slice(1),
@@ -24,7 +25,6 @@ function createWindow(): BrowserWindow {
       enableRemoteModule : true // true if you want to run 2e2 test  with Spectron or use remote module in renderer context (ie. Angular)
     },
   });
-
   if (serve) {
 
     win.webContents.openDevTools();
@@ -48,6 +48,10 @@ function createWindow(): BrowserWindow {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     win = null;
+  });
+
+  win.on('ready-to-show',()=>{
+    autoUpdater.checkForUpdatesAndNotify();
   });
 
   return win;
@@ -81,3 +85,12 @@ try {
   // Catch Error
   // throw e;
 }
+autoUpdater.on('update-available', () => {
+  win.webContents.send('update_available');
+});
+autoUpdater.on('update-downloaded', () => {
+  win.webContents.send('update_downloaded');
+});
+ipcMain.on('restart_app', () => {
+  autoUpdater.quitAndInstall();
+});
