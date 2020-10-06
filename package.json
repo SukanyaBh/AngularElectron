@@ -22,11 +22,16 @@
   ],
   "main": "main.js",
   "private": true,
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/SukanyaBh/AngularElectron.git"
+  },
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "ng": "ng",
     "start": "npm-run-all -p electron:serve ng:serve",
-    "build": "npm run electron:serve-tsc && ng build --base-href ./",
+    "build": "npm run electron:serve-tsc && ng build --base-href ./ && electron-builder build --win --publish never",
+    "deploy": "npm run electron:serve-tsc && ng build --base-href ./ && electron-builder build --win --publish always",
     "build:dev": "npm run build -- -c dev",
     "build:prod": "npm run build -- -c production",
     "ng:serve": "ng serve -c web -o",
@@ -39,6 +44,14 @@
     "e2e": "npm run build:prod && cross-env TS_NODE_PROJECT='e2e/tsconfig.e2e.json' mocha --timeout 300000 --require ts-node/register e2e/**/*.e2e.ts",
     "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
     "lint": "ng lint"
+  },"build": {
+    "appId": "com.example.ElectronAutoUpdate",
+    "publish": [
+      {
+        "provider": "github",
+        "token": "0cc64183bcd11ec2641eaa6e62c5bc44417004af"
+      }
+    ]
   },
   "devDependencies": {
     "@angular-builders/custom-webpack": "10.0.1",
@@ -95,8 +108,5 @@
   },
   "engines": {
     "node": ">=10.13.0"
-  },
-  "dependencies": {
-    "electron-updater": "4.3.5"
   }
 }
