@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Angular Electron</title>
+  <title>Angular Electron 8.0.6</title>
   <base href="/">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -36,6 +36,7 @@
   </div>
 </body>
 <script>
+  const {ipcRenderer} = require('electron')
   const notification = document.getElementById('notification');
 const message = document.getElementById('message');
 const restartButton = document.getElementById('restart-button');
